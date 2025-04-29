@@ -1,0 +1,66 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}ประวัติการยืมคืนอุปกรณ์{% endblock %}
+
+{% block content %}
+<h1>ประวัติการยืมคืนอุปกรณ์</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ชื่อผู้ยืม</th>
+            <th>ชื่ออุปกรณ์</th>
+            <th>วันที่ยืม</th>
+            <th>วันที่คืน</th>
+            <th>สถานะ</th>
+            <th>ลบ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for borrowing in borrowing_list %}
+        <tr>
+            <td>{{ borrowing.user.name }}</td>
+            <td>{{ borrowing.equipment.name }}</td>
+            <td>{{ borrowing.borrow_date|date:"d/m/Y H:i" }}</td>
+            <td>{{ borrowing.return_date|date:"d/m/Y H:i"|default:"-" }}</td>
+            <td>
+                {% if borrowing.return_date %}
+                    คืนแล้ว
+                {% else %}
+                    ยังไม่คืน
+                {% endif %}
+            </td>
+            <td>
+                <form method="post" action="{% url 'delete_borrowing' borrowing.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm delete-borrowing-button">ลบ</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">ไม่มีประวัติการยืมคืน</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteBorrowingButtons = document.querySelectorAll('.delete-borrowing-button');
+
+        deleteBorrowingButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // ป้องกันการ submit ฟอร์มทันที
+
+                const confirmation = confirm("คุณต้องการลบประวัติการยืมคืนนี้ใช่หรือไม่?");
+
+                if (confirmation) {
+                    this.closest('form').submit(); // ถ้าผู้ใช้กด "ตกลง" ให้ submit ฟอร์ม
+                } else {
+                    console.log("ยกเลิกการลบประวัติการยืมคืน");
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}รายการอุปกรณ์{% endblock %}
+
+{% block content %}
+<h1>รายการอุปกรณ์สำนักงาน</h1>
+<p>
+    <a href="{% url 'add_equipment' %}" class="btn btn-success btn-sm">เพิ่มอุปกรณ์</a>
+    <a href="{% url 'add_user' %}" class="btn btn-info btn-sm">เพิ่มผู้ใช้งาน</a>
+    <a href="{% url 'borrowed_equipment_report' %}" class="btn btn-warning btn-sm">รายงานอุปกรณ์ที่ถูกยืม</a>
+</p>
+<hr>
+<h2>รายละเอียดอุปกรณ์</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ชื่ออุปกรณ์</th>
+            <th>รายละเอียด</th>
+            <th>จำนวนทั้งหมด</th>
+            <th>จำนวนคงเหลือ</th>
+            <th>ต้องการยืม</th>
+            <th>ประวัติการใช้งาน</th>
+            <th>แก้ไข</th>
+            <th>ลบ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for equipment in equipments %}
+        <tr>
+            <td>{{ equipment.name }}</td>
+            <td>{{ equipment.description|default:"-" }}</td>
+            <td>{{ equipment.total_quantity }}</td>
+            <td>{{ equipment.available_quantity }}</td>
+            <td>
+                <a href="{% url 'borrow_equipment' %}" class="btn btn-primary btn-sm">ยืม</a>
+                {% if equipment.current_loans %}
+                <ul class="list-unstyled">
+                    {% for loan in equipment.current_loans %}
+                    <li>
+                        {{ loan.user.name }} ({{ loan.quantity }} ชิ้น)
+                        กำหนดคืน: {{ loan.due_date|date:"d/m/Y"|default:"-" }}
+                        <a href="{% url 'return_equipment' loan.id %}" class="btn btn-danger btn-sm">คืน</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </td>
+            <td><a href="{% url 'equipment_loan_history_report' equipment.id %}" class="btn btn-secondary btn-sm">ประวัติ</a></td>
+            <td><a href="{% url 'edit_equipment' equipment.id %}" class="btn btn-warning btn-sm">แก้ไข</a></td>
+            <td>
+                <button class="btn btn-danger btn-sm delete-equipment-button" data-item-id="{{ equipment.id }}">ลบ</button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">ไม่มีอุปกรณ์ในระบบ</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>รายชื่อผู้ใช้งาน</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ชื่อผู้ใช้งาน</th>
+            <th>อายุ</th>
+            <th>ประวัติการใช้งาน</th>
+            <th>แก้ไข</th>
+            <th>ลบ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.age|default:"-" }}</td>
+            <td><a href="{% url 'user_loan_history_report' user.id %}" class="btn btn-secondary btn-sm">ประวัติ</a></td>
+            <td><a href="{% url 'edit_user' user.id %}" class="btn btn-warning btn-sm">แก้ไข</a></td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm delete-user-button" data-user-id="{{ user.id }}">ลบ</button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">ไม่มีผู้ใช้งานในระบบ</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // โค้ดสำหรับการลบอุปกรณ์
+    const deleteEquipmentButtons = document.querySelectorAll('.delete-equipment-button');
+
+    deleteEquipmentButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const itemId = this.dataset.itemId;
+            const confirmation = confirm("คุณต้องการลบอุปกรณ์นี้ใช่หรือไม่?");
+            if (confirmation) {
+                window.location.href = `/delete_equipment/${itemId}/`; // น่าจะเป็น URL สำหรับการลบอุปกรณ์โดยตรง
+            } else {
+                console.log("ยกเลิกการลบอุปกรณ์");
+            }
+        });
+    });
+
+    // โค้ดสำหรับการลบผู้ใช้งาน
+    const deleteUserButtons = document.querySelectorAll('.delete-user-button');
+
+    deleteUserButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const userId = this.dataset.userId;
+            const confirmation = confirm("คุณต้องการลบผู้ใช้งานนี้ใช่หรือไม่?");
+            if (confirmation) {
+                window.location.href = `/delete/user/confirm/${userId}/`; // เปลี่ยน URL ที่นี่ให้ไปหน้ายืนยัน
+            } else {
+                console.log("ยกเลิกการลบผู้ใช้งาน");
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

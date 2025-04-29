@@ -1,0 +1,31 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}ประวัติการยืมคืน: {{ equipment.name }}{% endblock %}
+
+{% block content %}
+<h1>ประวัติการยืมคืน: {{ equipment.name }}</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ผู้ยืม</th>
+            <th>วันที่ยืม</th>
+            <th>วันที่คืน</th>
+            <th>จำนวน</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for loan in loan_history %}
+        <tr>
+            <td>{{ loan.user.name }}</td>
+            <td>{{ loan.borrow_date }}</td>
+            <td>{{ loan.return_date|default:"ยังไม่คืน" }}</td>
+            <td>{{ loan.quantity }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">ไม่มีประวัติการยืมคืนสำหรับอุปกรณ์นี้</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+<a href="{% url 'equipment_list' %}" class="btn btn-secondary">กลับไปรายการอุปกรณ์</a>
+{% endblock %}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}ระบบบันทึกการยืมคืนอุปกรณ์{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"/>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sriracha&display=swap');
+      body {
+        font-family: "Prompt", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background: #eeaeca;
+        background: radial-gradient(
+          circle,
+          rgba(238, 174, 202, 1) 0%,
+          rgba(148, 187, 233, 1) 100%
+        );
+      }
+
+      .navbar {
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .navbar-brand {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #007bff !important;
+      }
+      .navbar-nav .nav-link {
+        font-size: 1.1rem;
+        color: #555 !important;
+        margin-left: 15px;
+      }
+      .navbar-nav .nav-link:hover {
+        color: #0056b3 !important;
+      }
+      .container {
+        margin-top: 30px;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+      }
+      .nav-item.active .nav-link {
+        font-weight: 500;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* Custom Navbar Styles */
+      .navbar {
+        background-color: #f8f9fa; /* Light gray background */
+        border-bottom: 1px solid #dee2e6; /* Light border */
+      }
+
+      .navbar-brand {
+        color: #261fb3 !important; /* Green brand color */
+      }
+
+      .navbar-nav .nav-link {
+        color: #495057 !important; /* Dark gray link color */
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: #1e7e34 !important; /* Darker green on hover */
+        background-color: #e9ecef; /* Light background on hover */
+        border-radius: 0.25rem;
+      }
+
+      .navbar-nav .nav-item.active .nav-link {
+        color: #fff !important;
+        background-color: #9acbd0;
+        border-radius: 0.25rem;
+      }
+    </style>
+  </head>
+  <body class="">
+    <nav
+      class="navbar navbar-expand-lg shadow-sm"
+      style="background-color: #f2efe7"
+    >
+      <a class="navbar-brand" href="{% url 'equipment_list' %}"
+        >ระบบยืมคืนอุปกรณ์</a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'equipment_list' %}"
+              >หน้าหลัก <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'borrowed_equipment_report' %}"
+              >รายงานอุปกรณ์ที่ถูกยืม</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'borrowing_history' %}"
+              >ประวัติการยืมคืน</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search_borrowings' %}">ค้นหา</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div
+      class="container"
+      style="justify-content: center; text-align: center; margin: 2rem auto"
+    >
+      {% block content %} {% endblock %}
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"
+      integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L5j/wfgmfPKKNjvuyx6U9"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

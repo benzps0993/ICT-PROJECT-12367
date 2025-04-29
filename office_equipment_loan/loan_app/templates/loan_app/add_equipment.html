@@ -1,0 +1,14 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}เพิ่มอุปกรณ์{% endblock %}
+
+{% block content %}
+<h1>เพิ่มอุปกรณ์ใหม่</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">เพิ่มอุปกรณ์</button>
+</form>
+<br>
+<a href="{% url 'equipment_list' %}" class="btn btn-secondary">กลับไปรายการอุปกรณ์</a>
+{% endblock %}

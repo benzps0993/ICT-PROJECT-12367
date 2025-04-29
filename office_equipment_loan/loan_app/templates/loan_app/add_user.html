@@ -1,0 +1,27 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}เพิ่มผู้ใช้งานใหม่{% endblock %}
+
+{% block content %}
+<h1>เพิ่มผู้ใช้งานใหม่</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+        {{ form.name }}
+        {% if form.name.errors %}
+            <div class="alert alert-danger">{{ form.name.errors }}</div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.age.id_for_label }}">อายุ:</label>
+        {{ form.age }}
+        {% if form.age.errors %}
+            <div class="alert alert-danger">{{ form.age.errors }}</div>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">เพิ่มผู้ใช้งาน</button>
+    <a href="{% url 'equipment_list' %}" class="btn btn-secondary">กลับไปหน้าหลัก</a>
+</form>
+{% endblock %}

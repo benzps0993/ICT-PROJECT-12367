@@ -1,0 +1,13 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}ยืนยันการลบอุปกรณ์{% endblock %}
+
+{% block content %}
+<h1>ยืนยันการลบอุปกรณ์</h1>
+<p>คุณต้องการลบอุปกรณ์ "{{ equipment.name }}" ใช่หรือไม่?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">ลบ</button>
+    <a href="{% url 'equipment_list' %}" class="btn btn-secondary">ยกเลิก</a>
+</form>
+{% endblock %}

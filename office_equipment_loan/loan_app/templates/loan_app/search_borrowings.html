@@ -1,0 +1,58 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}ค้นหาข้อมูลการยืมคืน{% endblock %}
+
+{% block content %}
+  <h1>ค้นหาข้อมูลการยืมคืน</h1>
+
+  <form method="GET" action="{% url 'search_results' %}">
+    <div>
+      <label for="search_query">คำค้นหา:</label>
+      <input type="text" id="search_query" name="q">
+    </div>
+    <div>
+      <label for="search_by">ค้นหาตาม:</label>
+      <select id="search_by" name="by">
+        <option value="user__name">ชื่อผู้ยืม</option>
+        <option value="equipment__name">ชื่ออุปกรณ์</option>
+        <option value="status">สถานะ</option>
+      </select>
+    </div>
+    <button type="submit">ค้นหา</button>
+  </form>
+
+  {% if results %}
+    <h2>ผลการค้นหา</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ชื่อผู้ยืม</th>
+          <th>ชื่ออุปกรณ์</th>
+          <th>วันที่ยืม</th>
+          <th>วันที่คืน</th>
+          <th>สถานะ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for borrowing in results %}
+          <tr>
+            <td>{{ borrowing.user.name }}</td>
+            <td>{{ borrowing.equipment.name }}</td>
+            <td>{{ borrowing.borrow_date|date:"d/m/Y H:i" }}</td>
+            <td>{{ borrowing.return_date|date:"d/m/Y H:i"|default:"-" }}</td>
+            <td>
+              {% if borrowing.return_date %}
+                คืนแล้ว
+              {% else %}
+                ยังไม่คืน
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">ไม่พบข้อมูลที่ตรงกับการค้นหา</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}คืนอุปกรณ์{% endblock %}
+
+{% block content %}
+<h1>คืนอุปกรณ์</h1>
+<p>กำลังคืน: {{ loan.equipment.name }} ที่ยืมโดย {{ loan.user.name }} ({{ loan.quantity }} ชิ้น)</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-danger">คืนอุปกรณ์</button>
+</form>
+<br>
+<a href="{% url 'equipment_list' %}" class="btn btn-secondary">กลับไปรายการอุปกรณ์</a>
+{% endblock %}

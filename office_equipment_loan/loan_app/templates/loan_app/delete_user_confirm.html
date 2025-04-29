@@ -1,0 +1,13 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}ยืนยันการลบผู้ใช้งาน{% endblock %}
+
+{% block content %}
+<h1>ยืนยันการลบผู้ใช้งาน</h1>
+<p>คุณต้องการลบผู้ใช้งาน "{{ user.name }}" ใช่หรือไม่?</p>
+<form method="post" action="{% url 'delete_user_process' user.id %}"> {# เปลี่ยน action ที่นี่ #}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">ลบ</button>
+    <a href="{% url 'equipment_list' %}" class="btn btn-secondary">ยกเลิก</a>
+</form>
+{% endblock %}

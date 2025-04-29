@@ -1,0 +1,33 @@
+{% extends 'loan_app/base.html' %}
+
+{% block title %}รายงานอุปกรณ์ที่กำลังถูกยืม{% endblock %}
+
+{% block content %}
+<h1>รายงานอุปกรณ์ที่กำลังถูกยืม</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>อุปกรณ์</th>
+            <th>ผู้ยืม</th>
+            <th>วันที่ยืม</th>
+            <th>จำนวนที่ยืม</th>
+            <th>กำหนดคืน</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for loan in borrowed_loans %}
+        <tr>
+            <td>{{ loan.equipment.name }}</td>
+            <td>{{ loan.user.name }}</td>
+            <td>{{ loan.borrow_date }}</td>
+            <td>{{ loan.quantity }}</td>
+            <td>{{ loan.due_date|default:"-" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">ไม่มีอุปกรณ์ใดที่กำลังถูกยืม</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+<a href="{% url 'equipment_list' %}" class="btn btn-secondary">กลับไปรายการอุปกรณ์</a>
+{% endblock %}
